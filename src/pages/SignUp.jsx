@@ -1,24 +1,37 @@
-import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from "react-hook-form";
+import axios from "axios";
 
 function SignUp() {
     const {register, handleSubmit, formState: {errors}} = useForm()
-    const {error,setError} = useState()
+    const [error,setError] = useState()
+    const navigate = useNavigate()
+    const baseUrl = 'http://localhost:3000'
 
-    function handleFormSubmit(data) {
-        console.log(data)
+
+
+    async function handleFormSubmit(data) {
+        try {
+            const response = await axios.post(baseUrl + '/register', {
+                    ...data,
+                }
+            )
+            console.log('signup response:', response.data)
+        }catch (e) {
+            setError(e.message)
+            console.error(e.message)
+        }finally {
+            {error? navigate('/signin'):''}
+        }
     }
 
 
   return (
     <>
       <h1>Registreren</h1>
+        <form onSubmit={handleSubmit(handleFormSubmit)}>
 
-
-        <form className='login-container' onSubmit={handleSubmit(handleFormSubmit)}>
-
-            {error}
             <label>Username:</label>
             <input type='text' {...register('username', {
                 required: {
@@ -47,10 +60,12 @@ function SignUp() {
             {errors.email && <p className='login-error-message'>{errors.email.message}</p>}
 
             <button className='login-btn' type='submit'>Registreer</button>
-        </form>
+
+            </form>
       <p>Heb je al een account? Je kunt je <Link to="/signin">hier</Link> inloggen.</p>
     </>
   );
+
 }
 
 export default SignUp;

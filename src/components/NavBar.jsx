@@ -5,9 +5,9 @@ import {AuthContext} from "../context/AuthContext";
 
 function NavBar() {
   const navigate = useNavigate();
-  const {isAuth,logIn,logOut} = useContext(AuthContext)
+  const {auth,isAuth,logIn,logOut} = useContext(AuthContext)
 
-  console.log(isAuth)
+  // console.log(auth)
   return (
     <nav>
         <Link to="/">
@@ -18,9 +18,8 @@ function NavBar() {
             </h3>
           </span>
         </Link>
-      {isAuth === false &&
+      {auth.isAuth === false &&
       <div>
-
         <button
           type="button"
           onClick={() => navigate('/signin')}
@@ -37,7 +36,7 @@ function NavBar() {
       </div>
       }
 
-      {isAuth === true &&
+      {auth.isAuth === true &&
       <button
       type='button'
       onClick={()=> logOut()}
