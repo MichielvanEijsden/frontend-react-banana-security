@@ -18,7 +18,7 @@ function AuthContextProvider({children}){
     useEffect(() => {
         const token = localStorage.getItem('token')
 
-        if (token){
+        if (token && isTokenValid(token)){
            void logIn(token)
         }else {
             setAuth({
@@ -57,8 +57,8 @@ function AuthContextProvider({children}){
         }finally {
             console.log('de token is:',token)
 
-            console.log('gebruiker is in gelogged')
-            // navigate('/profile')
+            console.log('gebruiker is in gelogd')
+
         }
 
     }
@@ -71,7 +71,7 @@ function AuthContextProvider({children}){
             user: null,
             status: 'done',
         })
-        console.log('gebruiker is uit gelogged')
+        console.log('gebruiker is uit gelogd')
         navigate('/')
     }
 

@@ -7,13 +7,12 @@ function SignUp() {
     const {register, handleSubmit, formState: {errors}} = useForm()
     const [error,setError] = useState()
     const navigate = useNavigate()
-    const baseUrl = 'http://localhost:3000'
 
 
 
     async function handleFormSubmit(data) {
         try {
-            const response = await axios.post(baseUrl + '/register', {
+            const response = await axios.post('http://localhost:3000/register', {
                     ...data,
                 }
             )
@@ -59,7 +58,7 @@ function SignUp() {
             })} />
             {errors.email && <p className='login-error-message'>{errors.email.message}</p>}
 
-            <button className='login-btn' type='submit'>Registreer</button>
+            <button  type='submit'>Registreer</button>
 
             </form>
       <p>Heb je al een account? Je kunt je <Link to="/signin">hier</Link> inloggen.</p>

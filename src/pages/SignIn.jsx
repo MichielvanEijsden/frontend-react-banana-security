@@ -1,29 +1,32 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from "react-hook-form";
 import {AuthContext} from "../context/AuthContext";
 import axios from "axios";
 
+
 function SignIn() {
     const {register, handleSubmit, formState: {errors}} = useForm()
-    const [error,setError]=useState()
+    const [error,setError]=useState(false)
     const {logIn} = useContext(AuthContext)
-
+    const navigate = useNavigate()
 
     async function handleFormSubmit(data) {
-       try {
-           const response = await axios.post('http://localhost:3000/login', {
+        try {
+            const response = await axios.post('http://localhost:3000/login', {
                     ...data
-               }
-           )
-           logIn(response.data.accessToken)
-       }catch (e) {
-           console.error('de error:',e)
-           setError(e.message)
-       }
+                }
+            )
+            logIn(response.data.accessToken)
+        } catch (e) {
+            console.error('de error:', e)
+            setError(e.message)
+
+        }finally {
+            navigate('/profile')
+        }
+
     }
-
-
 
   return (
     <>
@@ -34,7 +37,7 @@ function SignIn() {
             <input type='text' {...register('email', {
                 required: {
                     value: true,
-                    message: 'vul je wachtwoord in',
+                    message: 'vul je email in',
                 },
                 validate :(value)=> value.includes('@') ||'Email moet een @ bevatten',
             })} />
@@ -42,17 +45,17 @@ function SignIn() {
 
             <label>Password:</label>
             <input type='password' {...register('password', {
-                required: {
-                    value: true,
-                    message: 'vul je wachtwoord in'
-                }
+            required: {
+                value: true,
+                message: 'vul je wachtwoord in'
+            }
             })} />
            {errors.password && <p className='login-error-message'>{errors.password.message}</p>}
-            <button className='login-btn' type='submit'>Login</button>
+            <button type='submit'>Login</button>
 
         </form>
 
-      <p>Heb je nog geen account? <Link to="/signup">Registreer</Link> je dan eerst.</p>
+      <p>Heb je nog geen account? <Link to='/signup'>Registreer</Link> je dan eerst.</p>
     </>
   );
 }
